@@ -1,0 +1,804 @@
+library(tidyverse)
+library(readxl)
+
+# Set the folder path where your files are located
+folder_path <- "/Users/ninazhao/PycharmProjects/masst_only_William/output/20250310_DrugLib_Updated_Analog_Search"
+# List all files in the folder that end with "_analog_matches.tsv"
+file_list <- list.files(folder_path, pattern = "_analog_matches.tsv$", full.names = TRUE)
+# Function to process each file
+process_file <- function(file) {
+  df <- read_tsv(file, col_types = cols(.default = "c"))
+  df <- df %>%
+    mutate(`Delta Mass` = as.numeric(`Delta Mass`))
+  df_filtered <- df %>%
+    filter(abs(`Delta Mass`) > 0.9)
+  ccmslib_value <- str_extract(basename(file), "CCMSLIB\\d+")
+  df_filtered <- df_filtered %>%
+    mutate(CCMSLIB = ccmslib_value)
+  return(df_filtered)
+}
+# Process all files and combine into one dataframe
+combined_df <- bind_rows(lapply(file_list, process_file))
+# write.csv(combined_df, "analogMASST/20250313_analog_reprocess_William_code/20250313_new_analogMASST_result_combined.csv")
+
+combined_df <- read.csv("analogMASST/20250313_analog_reprocess_William_code/20250313_new_analogMASST_result_combined.csv")
+
+
+16236/66089
+
+length(unique(combined_df$CCMSLIB))
+
+unique_USI <- unique(combined_df$USI)
+
+
+# read in druglib metadata
+all_exogenous_drug <- read.csv("/Users/ninazhao/PycharmProjects/masst_only_William/examples/GNPS_Drug_Library_Metadata_Drugs_Exogenous.csv")
+druglib_metadata <- read.csv("application/Final_DrugLib_metadata/GNPS_Drug_Library_drug_metadata.csv")
+druglib_metadata_filtered <- druglib_metadata[!duplicated(druglib_metadata$gnps_libid),]
+
+druglib_metadata_filtered <- druglib_metadata_filtered %>%
+  mutate(split_inchikey = sub("-.*", "", inchikey))
+
+all_exogenous_drug <- all_exogenous_drug %>% left_join(druglib_metadata_filtered, by = c("Compound" = "gnps_libid"))
+
+length(unique(all_exogenous_drug$split_inchikey))
+
+# how many has analog
+length(unique(combined_df$CCMSLIB))
+new_analog_all <- combined_df %>% left_join(druglib_metadata_filtered, by = c("CCMSLIB" = "gnps_libid"))
+length(unique(new_analog_all$USI))
+
+# delta mass filtering
+explained_delta_mass <- read_xlsx("analogMASST/20231123_analog_reprocess_delta_mass_with_direction/20231123_delta_mass_cleanup_with_direction.xlsx")
+all_detected_delta <- data.frame(detected_delta = sort(unique(combined_df$Delta.Mass)))
+all_detected_delta$include <- rep(FALSE, nrow(all_detected_delta))
+for (i in 1:nrow(all_detected_delta)){
+  for (j in 1:nrow(explained_delta_mass)){
+    if (abs(all_detected_delta$detected_delta[i] - explained_delta_mass$`mz delta (=drug - analog)`[j]) < 0.005){
+      all_detected_delta$include[i] <- TRUE
+    }
+  }
+}
+
+include_delta <- all_detected_delta$detected_delta[all_detected_delta$include == TRUE]
+new_analog_all_delta_mass_filtered <- new_analog_all %>% dplyr::filter(new_analog_all$Delta.Mass %in% include_delta)
+length(unique(new_analog_all_delta_mass_filtered$split_inchikey))
+
+length(unique(new_analog_all_delta_mass_filtered$USI))
+
+# new_delta_mass_count_per_structure <- new_analog_all_delta_mass_filtered %>%
+#   group_by(split_inchikey) %>%
+#   summarise(Unique_Delta_Mass_Count = n_distinct(`Delta Mass`)) %>%
+#   ungroup()
+# new_delta_mass_count_per_structure$class <- rep("new", nrow(new_delta_mass_count_per_structure))
+
+USI_to_download <- data.frame(USI = unique(new_analog_all_delta_mass_filtered$USI))
+write.csv(USI_to_download, "analogMASST/20250313_analog_reprocess_William_code/20250313_USI_to_download.csv")
+
+
+# #### check old analogMASST ####
+# old_analog_all <- read.csv("analogMASST/20250313_analog_reprocess_William_code/20250313_old_analogMASST_result_combined.csv")
+# old_analog_all <- old_analog_all %>% left_join(druglib_metadata_filtered, by = c("CCMSLIB" = "gnps_libid"))
+# length(unique(old_analog_all$split_inchikey))
+# 
+# # delta mass filtering
+# all_detected_delta_old <- data.frame(detected_delta = sort(unique(old_analog_all$Delta.Mass)))
+# all_detected_delta_old$include <- rep(FALSE, nrow(all_detected_delta_old))
+# for (i in 1:nrow(all_detected_delta_old)){
+#   for (j in 1:nrow(explained_delta_mass)){
+#     if (abs(all_detected_delta_old$detected_delta[i] - explained_delta_mass$`mz delta (=drug - analog)`[j]) < 0.005){
+#       all_detected_delta_old$include[i] <- TRUE
+#     }
+#   }
+# }
+# 
+# include_delta <- all_detected_delta_old$detected_delta[all_detected_delta_old$include == TRUE]
+# old_analog_all_delta_mass_filtered <- old_analog_all %>% dplyr::filter(old_analog_all$Delta.Mass %in% include_delta)
+# length(unique(old_analog_all_delta_mass_filtered$CCMSLIB))
+# 
+# old_delta_mass_count_per_structure <- old_analog_all_delta_mass_filtered %>%
+#   group_by(split_inchikey) %>%
+#   summarise(Unique_Delta_Mass_Count = n_distinct(Delta.Mass)) %>%
+#   ungroup()
+# old_delta_mass_count_per_structure$class <- rep("old", nrow(old_delta_mass_count_per_structure))
+# 
+# 
+# boxplot <- rbind(old_delta_mass_count_per_structure, new_delta_mass_count_per_structure)
+# boxplot
+# 
+# ggplot(boxplot, aes(x = class, y = Unique_Delta_Mass_Count, fill = class)) +
+#   geom_boxplot() +
+#   geom_point(position = position_jitterdodge(), color = "black", alpha = 0.5, size = 3) +  # Add raw data points
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+# # check analog download
+# library(Spectra)
+# library(msdata)
+# library(MsBackendMgf)
+# library(readxl)
+# library(tidyverse)
+# library(stringr)
+# 
+# 
+# dda <- Spectra("/Users/ninazhao/Desktop/20250313_usi_download/20250316_drug_analog_USI_spectra.mgf", source = MsBackendMgf())
+# USI_downloaded <- dda@backend@spectraData@listData[["precursorMz"]]
+
+
+# # define a function to only keep features in the feature_keep for a mgf
+# read_pepmass_mgf <- function(input_file){
+#   pepmass_all <- c()
+#   usi_all <- c()
+#   current_block <- "" # Initialize an empty string to store the current block
+#   for (line in input_file) {
+#     if(current_block == ""){
+#       current_block <- line # add the line to the current block and avoid an empty line before the spectra
+#     }
+#     else{
+#       current_block <- paste(current_block, line, sep = "\n")
+#     }
+#     if (startsWith(line, "END IONS")) {
+#       pepmass_line <- grep("PEPMASS", unlist(strsplit(current_block, "\n")), value = TRUE)
+#       pepmass <- as.numeric(sub("PEPMASS=", "", pepmass_line)) # Extract PEPMASS from the current block
+#       usi_line <- grep("TITLE", unlist(strsplit(current_block, "\n")), value = TRUE)
+#       usi <- sub("TITLE=", "", usi_line) # Extract USI from the current block
+#       pepmass_all <- c(pepmass_all, pepmass)
+#       usi_all <- c(usi_all, usi)
+#       current_block <- ""  # Reset current_block for the next block
+#     }
+#   }
+#   return(data.frame(usi_all, pepmass_all))
+# }
+
+# double-check the modified cosine using matchms.similarity.ModifiedCosine
+analog_usi_all <- readLines("/Users/ninazhao/Desktop/20250313_usi_download/20250316_drug_analog_USI_spectra_FINAL.mgf") 
+analog_usi_info <- data.frame(
+  analog_scans = as.numeric(sub("SCANS=", "", analog_usi_all[grepl("SCANS=", analog_usi_all)])),
+  analog_pepmass = as.numeric(sub("PEPMASS=", "", analog_usi_all[grepl("PEPMASS=", analog_usi_all)])),
+  analog_usi = sub("TITLE=", "", analog_usi_all[grepl("TITLE=", analog_usi_all)]),
+  analog_charge = rep(1, 433274)
+)
+
+drug_spectra <- readLines("/Users/ninazhao/Library/CloudStorage/GoogleDrive-ninazhao1001@gmail.com/My Drive/drug_lib_share/finalfinal/GNPS_Drug_Library_Spectra_Drugs_and_Metabolites.mgf")
+drug_spectra_info <- data.frame(
+  drug_pepmass = as.numeric(sub("PEPMASS=", "", drug_spectra[grepl("PEPMASS=", drug_spectra)])),
+  drug_CCMSLIBID = sub("SPECTRUMID=", "", drug_spectra[grepl("SPECTRUMID=", drug_spectra)]),
+  drug_charge = sub("CHARGE=", "", drug_spectra[grepl("CHARGE=", drug_spectra)])
+)
+
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "-1"] <- 1
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "0"] <- 1
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "0+"] <- 1
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "1"] <- 1
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "1+"] <- 1
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "2"] <- 2
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "2+"] <- 2
+drug_spectra_info$drug_charge[drug_spectra_info$drug_charge == "3"] <- 3
+
+drug_spectra_info$drug_charge <- as.numeric(drug_spectra_info$drug_charge)
+
+
+drug_analog_spectra <- c(drug_spectra, analog_usi_all)
+writeLines(drug_analog_spectra, "/Users/ninazhao/Desktop/20250313_usi_download/input_all_spectra_drug_analog_usi.mgf") 
+
+analog_drug_matches <- new_analog_all_delta_mass_filtered %>% dplyr::select(c("Delta.Mass", "USI", "CCMSLIB"))
+analog_drug_matches_all <- analog_drug_matches %>%
+  left_join(analog_usi_info, by = c("USI" = "analog_usi")) %>%
+  left_join(drug_spectra_info, by = c("CCMSLIB" = "drug_CCMSLIBID"))
+analog_drug_matches_all$delta_diff <- ((analog_drug_matches_all$drug_pepmass * analog_drug_matches_all$drug_charge - 1.0078 * analog_drug_matches_all$drug_charge) - (analog_drug_matches_all$analog_pepmass - 1.0078) - analog_drug_matches_all$Delta.Mass)            
+# a <- analog_drug_matches_all[abs(analog_drug_matches_all$delta_diff) > 0.1 & !is.na(analog_drug_matches_all$delta_diff),]
+
+analog_drug_matches_all_filtered <- analog_drug_matches_all %>% dplyr::filter(!is.na(analog_pepmass))
+match_check<- data.frame(
+  analog = analog_drug_matches_all_filtered$USI,
+  drug = analog_drug_matches_all_filtered$CCMSLIB
+)
+write.csv(match_check, "/Users/ninazhao/Desktop/20250313_usi_download/Shipei_mod_cosine_check/drug_analog_usi_pairs.csv", row.names = F)
+
+# filter drug-analogUSI pairs based on ModifiedCosine results
+mod_cosine_check_result <- read.csv("/Users/ninazhao/Desktop/20250313_usi_download/Shipei_mod_cosine_check/output.csv")
+# a <- mod_cosine_check_result[mod_cosine_check_result$score < 0.7,]
+# hist(mod_cosine_check_result$score)
+# length(unique(a$analog))
+pairs_passing_mod_cosine <- mod_cosine_check_result %>% dplyr::filter(score > 0.65)
+colnames(pairs_passing_mod_cosine)[3:4] <- c("matchms_score", "matchms_peak_numbers")
+
+pairs_passing_mod_cosine_all_info <- pairs_passing_mod_cosine %>% left_join(analog_drug_matches_all, by = c("analog" = "USI", "drug" = "CCMSLIB"))
+pairs_passing_mod_cosine_all_info$analog_charge[abs(pairs_passing_mod_cosine_all_info$delta_diff) > 0.1] <- 2
+pairs_passing_mod_cosine_all_info$delta_diff_modified <- ((pairs_passing_mod_cosine_all_info$drug_pepmass * pairs_passing_mod_cosine_all_info$drug_charge - 1.0078 * pairs_passing_mod_cosine_all_info$drug_charge) - (pairs_passing_mod_cosine_all_info$analog_pepmass * pairs_passing_mod_cosine_all_info$analog_charge - 1.0078*pairs_passing_mod_cosine_all_info$analog_charge) - pairs_passing_mod_cosine_all_info$Delta.Mass)   
+
+length(unique(pairs_passing_mod_cosine_all_info$analog))
+
+# https://gnps2.org/status?task=dabe0537e415416c9b2efadd9280b945
+gnps_lib_match <- read.csv("analogMASST/20250313_analog_reprocess_William_code/drug_analog_usi_with_gnps_lib_top1.tsv", sep = "\t")
+
+pairs_passing_gnps_lib_check <- pairs_passing_mod_cosine_all_info %>% 
+  dplyr::filter(!(analog_scans %in% gnps_lib_match$X.Scan.))
+
+write.csv(pairs_passing_gnps_lib_check, "analogMASST/20250313_analog_reprocess_William_code/20250319_usi_drug_pairs_passing_delta_modcosine_gnpslib_filters.csv", row.names = F)
+
+pairs_passing_gnps_lib_check <- read.csv("analogMASST/20250313_analog_reprocess_William_code/20250319_usi_drug_pairs_passing_delta_modcosine_gnpslib_filters.csv")
+
+usi_to_include <- unique(pairs_passing_gnps_lib_check$analog)
+usi_charge_two <- unique(pairs_passing_gnps_lib_check$analog[pairs_passing_gnps_lib_check$analog_charge == 2])
+
+# a <- new_analog_all_delta_mass_filtered %>% dplyr::filter(USI %in% usi_to_include)
+
+
+# modify downloaded USI for falcon
+# clean_mgf_usi <- function(input_file, usi_charge_two, usi_to_include){
+#   blocks_to_keep <- list() # Initialize an empty list to store the spectra to keep
+#   current_block <- "" # Initialize an empty string to store the current block
+#   block_count <- 0 # Counter for processed blocks
+#   start_time <- Sys.time() # Start time tracking
+#   for (line in input_file) {
+#     if(current_block == ""){
+#       current_block <- line # add the line to the current block and avoid an empty line before the spectra
+#     }else{
+#       current_block <- paste(current_block, line, sep = "\n")
+#     }
+#     
+#     if (startsWith(line, "END IONS")) {
+#       usi_line <- grep("TITLE=", unlist(strsplit(current_block, "\n")), value = TRUE)
+#       usi <- sub("TITLE=", "", usi_line) # Extract FEATURE_ID from the current block
+#       if (usi %in% usi_charge_two){
+#         current_block <- sub("CHARGE=1", "CHARGE=2", current_block)
+#       }
+#       if (usi %in% usi_to_include) {
+#         blocks_to_keep <- c(blocks_to_keep, current_block) # Append the current block to blocks_to_keep if FEATURE_ID is in keep list
+#       }
+#       block_count <- block_count + 1 # Increment block count
+#       
+#       # Print elapsed time every 100 blocks
+#       if (block_count %% 100 == 0) {
+#         elapsed_time <- Sys.time() - start_time
+#         cat(sprintf("Processed %d blocks. Elapsed time: %.2f seconds\n", block_count, as.numeric(elapsed_time)))
+#       }
+#       current_block <- ""  # Reset current_block for the next block
+#     }
+#   }
+#   cleaned_content <- paste(blocks_to_keep, collapse = "\n\n") # Combine the blocks to keep into a single string with an empty line between each block
+#   return(cleaned_content)
+# }
+# 
+# usi_raw <- readLines("/Users/ninazhao/Desktop/20250313_usi_download/20250316_drug_analog_USI_spectra_FINAL.mgf") 
+# usi_modified <- clean_mgf_usi(usi_raw, usi_charge_two, usi_to_include)
+# writeLines(usi_modified, "/Users/ninazhao/Desktop/20250313_usi_download/20250319_analog_USI_passing_delta_modcosine_gnpslib_filters.mgf") 
+
+
+clean_mgf_usi <- function(input_file, usi_charge_two, usi_to_include) {
+  blocks_to_keep <- vector("list", length(input_file) / 10) # Preallocate for speed
+  current_block <- character()  # Store the current block as a vector of lines
+  block_count <- 0  # Counter for processed blocks
+  start_time <- Sys.time()  # Start time tracking
+  keep_index <- 1  # Track index for blocks_to_keep
+  
+  for (line in input_file) {
+    current_block <- c(current_block, line)  # Append line to current block
+    
+    if (startsWith(line, "END IONS")) {
+      usi_line <- current_block[grepl("TITLE=", current_block)]  # Find TITLE= line
+      usi <- sub("TITLE=", "", usi_line)  # Extract USI
+      
+      if (usi %in% usi_charge_two) {
+        current_block <- sub("CHARGE=1", "CHARGE=2", current_block, fixed = TRUE)  # Modify charge
+      }
+      
+      if (usi %in% usi_to_include) {
+        blocks_to_keep[[keep_index]] <- paste0(current_block, collapse = "\n")  # Store processed block
+        keep_index <- keep_index + 1
+      }
+      
+      block_count <- block_count + 1  # Increment block count
+      
+      # Print elapsed time every 100 blocks
+      if (block_count %% 1000 == 0) {
+        cat(sprintf("Processed %d blocks. Elapsed time: %.2f seconds\n", block_count, as.numeric(difftime(Sys.time(), start_time, units = "secs"))))
+      }
+      
+      current_block <- character()  # Reset block
+    }
+  }
+  
+  cleaned_content <- paste0(blocks_to_keep[1:(keep_index - 1)], collapse = "\n\n")  # Combine only non-empty elements
+  return(cleaned_content)
+}
+
+usi_raw <- readLines("/Users/ninazhao/Desktop/20250313_usi_download/20250316_drug_analog_USI_spectra_FINAL.mgf")
+usi_modified <- clean_mgf_usi(usi_raw, usi_charge_two, usi_to_include)
+writeLines(usi_modified, "/Users/ninazhao/Desktop/20250313_usi_download/20250319_analog_USI_passing_delta_modcosine_gnpslib_filters_for_falcon.mgf")
+
+
+
+# filter after falcon
+pairs_passing_gnps_lib_check <- read.csv("analogMASST/20250313_analog_reprocess_William_code/20250319_usi_drug_pairs_passing_delta_modcosine_gnpslib_filters.csv")
+
+druglib_metadata <- read.csv("application/Final_DrugLib_metadata/GNPS_Drug_Library_drug_metadata.csv")
+druglib_metadata_filtered <- druglib_metadata[!duplicated(druglib_metadata$gnps_libid),]
+
+druglib_metadata_filtered <- druglib_metadata_filtered %>%
+  mutate(split_inchikey = sub("-.*", "", inchikey))
+
+pairs_passing_gnps_lib_check_full <- pairs_passing_gnps_lib_check %>% left_join(druglib_metadata_filtered, by = c("drug" = "gnps_libid"))
+
+usi_to_drug_inchikey_count <- pairs_passing_gnps_lib_check_full %>%
+  group_by(analog) %>%
+  summarise(inchikey_count = n_distinct(split_inchikey))
+
+falcon_results <- read.csv("/Users/ninazhao/Desktop/20250313_usi_download/falcon_results/falcon_cleaned.csv")
+
+a <- sort(table(falcon_results$cluster), decreasing = T)
+
+falcon_results$analog_scans <- as.numeric(sub("mzspec:USI000000:20250319_analog_USI_passing_delta_modcosine_gnpslib_filters_for_falcon:scan:", "", falcon_results$identifier))
+falcon_results <- falcon_results %>%
+  left_join(analog_usi_info %>% dplyr::select(c("analog_scans", "analog_usi")), by = "analog_scans") %>%
+  left_join(usi_to_drug_inchikey_count, by = c("analog_usi" = "analog"))
+
+falcon_results_usi_keepresult <- falcon_results %>%
+  group_by(cluster) %>%
+  slice_max(inchikey_count, n = 1, with_ties = FALSE) %>%
+  ungroup()
+
+pairs_passing_falcon_full <- pairs_passing_gnps_lib_check_full %>% 
+  dplyr::filter(analog %in% falcon_results_usi_keepresult$analog_usi)
+
+length(unique(pairs_passing_falcon_full$split_inchikey))
+
+pairs_passing_falcon_full$delta_mass_final <- sprintf("%.2f", 0-pairs_passing_falcon_full$Delta.Mass)
+
+pairs_passing_falcon_full$name_delta_mass <- paste0("'", pairs_passing_falcon_full$name_parent_compound, 
+                                                    " (Delta Mass:", 
+                                                    pairs_passing_falcon_full$delta_mass_final,
+                                                    ")'")
+
+combine_unique <- function(x) {
+  if (is.numeric(x)) {
+    return(as.character(paste(unique(x), collapse = "|")))  # Convert numeric values to character
+  } else {
+    unique_values <- unique(unlist(strsplit(as.character(x), "\\|")))  # Split, flatten, and remove duplicates
+    return(paste(unique_values, collapse = "|"))  # Recombine with "|"
+  }
+}
+
+# Summarizing Data
+unique_analog_metadata <- pairs_passing_falcon_full %>%
+  group_by(analog) %>%
+  summarise(across(everything(), combine_unique), .groups = "drop") 
+
+unique_analog_metadata <- unique_analog_metadata %>%
+  mutate(temp = analog) %>%  # Create a temporary duplicate
+  separate(temp, into = c("FILENAME", "EXACTSCAN"), sep = ":scan:", extra = "merge")
+
+
+write.csv(unique_analog_metadata, "analogMASST/20250313_analog_reprocess_William_code/20250319_analog_usi_metadata_Final_bf_manual.csv", row.names = F)
+
+# generating mgf for library upload
+unique_analog_metadata <- read.csv("analogMASST/20250313_analog_reprocess_William_code/20250319_analog_usi_metadata_Final_bf_manual.csv")
+
+clean_mgf_usi <- function(input_file, usi_to_include) {
+  blocks_to_keep <- vector("list", length(input_file) / 10) # Preallocate for speed
+  current_block <- character()  # Store the current block as a vector of lines
+  block_count <- 0  # Counter for processed blocks
+  start_time <- Sys.time()  # Start time tracking
+  keep_index <- 1  # Track index for blocks_to_keep
+  
+  for (line in input_file) {
+    current_block <- c(current_block, line)  # Append line to current block
+    
+    if (startsWith(line, "END IONS")) {
+      usi_line <- current_block[grepl("TITLE=", current_block)]  # Find TITLE= line
+      usi <- sub("TITLE=", "", usi_line)  # Extract USI
+      
+      if (usi %in% usi_to_include) {
+        blocks_to_keep[[keep_index]] <- paste0(current_block, collapse = "\n")  # Store processed block
+        keep_index <- keep_index + 1
+      }
+      
+      block_count <- block_count + 1  # Increment block count
+      
+      # Print elapsed time every 100 blocks
+      if (block_count %% 1000 == 0) {
+        cat(sprintf("Processed %d blocks. Elapsed time: %.2f seconds\n", block_count, as.numeric(difftime(Sys.time(), start_time, units = "secs"))))
+      }
+      
+      current_block <- character()  # Reset block
+    }
+  }
+  
+  cleaned_content <- paste0(blocks_to_keep[1:(keep_index - 1)], collapse = "\n\n")  # Combine only non-empty elements
+  return(cleaned_content)
+}
+
+usi_raw <- readLines("/Users/ninazhao/Desktop/20250313_usi_download/20250319_analog_USI_passing_delta_modcosine_gnpslib_filters_for_falcon.mgf")
+usi_modified <- clean_mgf_usi(usi_raw, unique_analog_metadata$analog)
+writeLines(usi_modified, "analogMASST/20250313_analog_reprocess_William_code/20250319_analog_usi_Final_GNPS_upload.mgf")
+
+###################
+# dataset testing #
+###################
+setwd("analogMASST/20250313_analog_reprocess_William_code/dataset_test")
+gnps_format_library <- readLines("20230326_updated_drug_analog_before_filtering_GNPS_FORMAT.mgf")
+analog_gnps_info <- data.frame(
+  analog_scans = as.numeric(sub("SCANS=", "", gnps_format_library[grepl("SCANS=", gnps_format_library)])),
+  analog_ID = sub("SPECTRUMID=", "", gnps_format_library[grepl("SPECTRUMID=", gnps_format_library)])
+)
+analog_metadata <- read.csv("/Users/ninazhao/Library/CloudStorage/GoogleDrive-ninazhao1001@gmail.com/My Drive/postdoc/R/ExpoMASST/analogMASST/20250313_analog_reprocess_William_code/20250319_analog_usi_metadata_Final_bf_manual.csv")
+analog_metadata <- left_join(analog_gnps_info, analog_metadata, by = c("analog_scans" = "analog_scans"))
+analog_metadata$chemical_source <- "Drug_analog"
+#write.csv(analog_metadata, "20240327_analog_metadata_manual_labelling.csv")
+analog_metadata_selected <- analog_metadata %>%
+  dplyr::select(c("analog_ID", "name_delta_mass", "pharmacologic_class", "therapeutic_area", "therapeutic_indication", "mechanism_of_action"))
+
+
+
+cal_occurrence <- function(df_libmatch){
+  df_libmatch_summary <- df_libmatch %>% 
+    dplyr::filter(MQScore > 0.9 | LibSearchSharedPeaks > 4) %>%
+    group_by(LibrarySpectrumID, CompoundName) %>%
+    summarise(occurrence = n_distinct(SpectrumFile), .groups = 'drop') %>%
+    left_join(analog_metadata_selected, by = c("LibrarySpectrumID" = "analog_ID"))
+  return(df_libmatch_summary)
+}
+add_exclusion <- function(df_libmatch_summary, occurrence_threshold, keep_name, exclude_name){
+  df_exclusion <- df_libmatch_summary %>%
+    dplyr::filter(occurrence > occurrence_threshold & #exclude analogs with >10% detection 
+                    !grepl(keep_name, name_delta_mass)) #keep drugs known to be used in this cohort
+  df_exclusion <- analog_metadata_selected %>% 
+    dplyr::filter(analog_ID %in% df_exclusion$LibrarySpectrumID |
+                    grepl(exclude_name, name_delta_mass))
+  return(df_exclusion)
+}
+
+#GATES_milk_MSV000090877
+#https://gnps2.org/status?task=7fdeff0051f641e482ac44a7a41e1fd3
+GATES_milk_MSV000090877 <- read.csv("GATES_milk_MSV000090877_merged_results.tsv", sep = "\t")
+GATES_milk_MSV000090877_summary <- cal_occurrence(GATES_milk_MSV000090877)
+exclusion_list <- add_exclusion(df_libmatch_summary = GATES_milk_MSV000090877_summary,
+                                occurrence_threshold = 49,
+                                keep_name = "nortriptyline|gamithromycin|sulfadimethoxine|framycetin|sulfamerazine",
+                                exclude_name = "sclareolide|miltefosine|medroxyprogesterone")
+analog_metadata$chemical_source[grepl("nortriptyline|sulfadimethoxine", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+#AGP_MSV000080673
+#https://gnps2.org/status?task=fff37bcf157d4517a50b850f55dee949
+AGP_MSV000080673 <- read.csv("AGP_MSV000080673_merged_results.tsv", sep = "\t")
+AGP_MSV000080673_summary <- cal_occurrence(AGP_MSV000080673)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AGP_MSV000080673_summary,
+                                occurrence_threshold = 280,
+                                keep_name = "sulfathiazole",
+                                exclude_name = "icosapent|testosterone|rosiptor"))
+analog_metadata$chemical_source[grepl("sulfathiazole", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+# AD mice_MSV000093168 receiving abx
+# https://gnps2.org/status?task=3e5cc81f050d478ba0039faebd0f4bae
+AD_mice_MSV000093168 <- read.csv("AD_mice_MSV000093168_merged_results.tsv", sep = "\t")
+AD_mice_MSV000093168_summary <- cal_occurrence(AD_mice_MSV000093168)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000093168_summary,
+                                        occurrence_threshold = 32,
+                                        keep_name = "sulfadimethoxine|framycetin",
+                                        exclude_name = "2-acetamido-2-deoxy-d-mannopyranose"))
+analog_metadata$chemical_source[grepl("sulfadimethoxine", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+# AD mice_MSV000093230 receiving abx
+# 
+AD_mice_MSV000093230 <- read.csv("AD_mice_MSV000093230_merged_results.tsv", sep = "\t")
+AD_mice_MSV000093230_summary <- cal_occurrence(AD_mice_MSV000093230)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000093230_summary,
+                                        occurrence_threshold = 54,
+                                        keep_name = "sulfadimethoxine|framycetin",
+                                        exclude_name = "mirogabalin"))
+analog_metadata$chemical_source[grepl("sulfadimethoxine", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+# AD mice_MSV000096039 receiving abx
+# https://gnps2.org/status?task=a27c4e45c5f241a98b94abfe63cdd12a
+AD_mice_MSV000096039 <- read.csv("AD_mice_MSV000096039_merged_results.tsv", sep = "\t")
+AD_mice_MSV000096039_summary <- cal_occurrence(AD_mice_MSV000096039)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000096039_summary,
+                                        occurrence_threshold = 48,
+                                        keep_name = "sulfadimethoxine|vancomycin|cefalexin|benzylpenicillin|penciclovir|fusafungine",
+                                        exclude_name = "ca-074|oglufanide"))
+analog_metadata$chemical_source[grepl("sulfadimethoxine", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+
+# AD mice_MSV000096038 receiving abx
+# https://gnps2.org/status?task=cdaf98f5c09343d4aae05d3afc00e599
+AD_mice_MSV000096038 <- read.csv("AD_mice_MSV000096038_merged_results.tsv", sep = "\t")
+AD_mice_MSV000096038_summary <- cal_occurrence(AD_mice_MSV000096038)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000096038_summary,
+                                        occurrence_threshold = 43,
+                                        keep_name = "sulfadimethoxine|vancomycin|cefalexin",
+                                        exclude_name = "fsldkjflsdjfoiwejf"))
+analog_metadata$chemical_source[grepl("sulfadimethoxine", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+
+# AD mice_MSV000096037 receiving abx
+# https://gnps2.org/status?task=009a5833cd5145cd8d49e93c33de74ff
+AD_mice_MSV000096037 <- read.csv("AD_mice_MSV000096037_merged_results.tsv", sep = "\t")
+AD_mice_MSV000096037_summary <- cal_occurrence(AD_mice_MSV000096037)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000096037_summary,
+                                        occurrence_threshold = 45,
+                                        keep_name = "sulfadimethoxine|cefalexin",
+                                        exclude_name = "dyphylline|su9516|hydrindantin|ethylestrenol|brazilin"))
+analog_metadata$chemical_source[grepl("sulfadimethoxine", analog_metadata$name_delta_mass)] <- "Drug_analog|Background/QAQC"
+
+
+# AD mice_MSV000096036 receiving abx
+# https://gnps2.org/status?task=d47484bd29af4fad9e80a09d23a055d3
+AD_mice_MSV000096036 <- read.csv("AD_mice_MSV000096036_merged_results.tsv", sep = "\t")
+AD_mice_MSV000096036_summary <- cal_occurrence(AD_mice_MSV000096036)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000096036_summary,
+                                        occurrence_threshold = 41,
+                                        keep_name = "sulfadimethoxine|sulfamerazine|sulfameter|cefalexin|nortriptyline|sulfamoxole",
+                                        exclude_name = "ethyl 3-aminobenzoate"))
+
+# AD mice_MSV000096035 receiving abx
+# https://gnps2.org/status?task=8ee38c757025492daaadbc7341c27dba
+AD_mice_MSV000096035 <- read.csv("AD_mice_MSV000096035_merged_results.tsv", sep = "\t")
+AD_mice_MSV000096035_summary <- cal_occurrence(AD_mice_MSV000096035)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = AD_mice_MSV000096035_summary,
+                                        occurrence_threshold = 39,
+                                        keep_name = "sulfamerazine|nortriptyline",
+                                        exclude_name = "jgkgkgjgjgygjd"))
+
+# 6ppd mice_MSV000091363
+#https://gnps2.org/status?task=294a63bbdeba49189c1c01033e5ac6ca
+PPD_mice_MSV000091363 <- read.csv("PPD_mice_MSV000091363_merged_results.tsv", sep = "\t")
+PPD_mice_MSV000091363_summary <- cal_occurrence(PPD_mice_MSV000091363)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = PPD_mice_MSV000091363_summary,
+                                        occurrence_threshold = 28,
+                                        keep_name = "nortriptyline",
+                                        exclude_name = "rimantadine|hymecromone|progesterone"))
+
+
+# MPRINT ADMIN milk_MSV000091520
+#https://gnps2.org/status?task=5dbe1ad7216a49c29560e6f118168c58
+MPRINT_milk_MSV000091520 <- read.csv("MPRINT_milk_MSV000091520_merged_results.tsv", sep = "\t")
+MPRINT_milk_MSV000091520_summary <- cal_occurrence(MPRINT_milk_MSV000091520)
+exclusion_list <- add_row(exclusion_list,
+                          add_exclusion(df_libmatch_summary = MPRINT_milk_MSV000091520_summary,
+                                        occurrence_threshold = 300,
+                                        keep_name = "sulfadimethoxine|sulfamoxole",
+                                        exclude_name = "acarbose"))
+
+write.csv(exclusion_list, "20230326_first_round_testing_exclusion_list.csv", row.names = F)
+write.csv(analog_metadata, "20240327_analog_metadata_manual_labelling.csv", row.names = F)
+
+###########################################
+# filter library for second round testing #
+###########################################
+
+clean_mgf_ccmslib <- function(input_file, libid_to_include) {
+  blocks_to_keep <- vector("list", length(input_file) / 10) # Preallocate for speed
+  current_block <- character()  # Store the current block as a vector of lines
+  block_count <- 0  # Counter for processed blocks
+  start_time <- Sys.time()  # Start time tracking
+  keep_index <- 1  # Track index for blocks_to_keep
+  
+  for (line in input_file) {
+    current_block <- c(current_block, line)  # Append line to current block
+    
+    if (startsWith(line, "END IONS")) {
+      libid_line <- current_block[grepl("SPECTRUMID=", current_block)]  
+      libid <- sub("SPECTRUMID=", "", libid_line)  # Extract USI
+      
+      if (libid %in% libid_to_include) {
+        blocks_to_keep[[keep_index]] <- paste0(current_block, collapse = "\n")  # Store processed block
+        keep_index <- keep_index + 1
+      }
+      
+      block_count <- block_count + 1  # Increment block count
+      
+      # Print elapsed time every 100 blocks
+      if (block_count %% 1000 == 0) {
+        cat(sprintf("Processed %d blocks. Elapsed time: %.2f seconds\n", block_count, as.numeric(difftime(Sys.time(), start_time, units = "secs"))))
+      }
+      
+      current_block <- character()  # Reset block
+    }
+  }
+  
+  cleaned_content <- paste0(blocks_to_keep[1:(keep_index - 1)], collapse = "\n\n")  # Combine only non-empty elements
+  return(cleaned_content)
+}
+
+include_libid <- analog_metadata_selected$analog_ID[!(analog_metadata_selected$analog_ID %in% exclusion_list$analog_ID)]
+mgf_raw <- readLines("20230326_updated_drug_analog_before_filtering_GNPS_FORMAT.mgf")
+usi_modified <- clean_mgf_ccmslib(mgf_raw,  include_libid)
+writeLines(usi_modified, "20230326_updated_drug_analog_GNPS_FORMAT_first_round_filtered.mgf")
+
+analog_metadata <- read.csv("20240327_analog_metadata_manual_labelling.csv")
+exclusion_list <- read.csv("20230326_first_round_testing_exclusion_list.csv")
+
+analog_metadata_filtered <- analog_metadata %>% dplyr::filter(!(analog_ID %in% exclusion_list$analog_ID))
+write.csv(analog_metadata_filtered, "round_two/20250327_analog_metadata_round_two_filtered.csv")
+
+analog_metadata_selected <- analog_metadata %>%
+  dplyr::select(c("analog_ID", "name_delta_mass", "chemical_source", "pharmacologic_class", "therapeutic_area", "therapeutic_indication", "mechanism_of_action"))
+###################
+# round_two_check #
+###################
+
+# AD_mice_MSV000093168_round_two
+# https://gnps2.org/status?task=888dc8ad8b344e99b31c7941f6bd9ea2
+AD_mice_MSV000093168_round_two <- read.csv("round_two/AD_mice_MSV000093168_round_two_merged_results.tsv", sep = "\t")
+AD_mice_MSV000093168_round_two_summary <- cal_occurrence(AD_mice_MSV000093168_round_two)
+
+# AD mice_MSV000093230_round_two
+# https://gnps2.org/status?task=7b11e180989a4af2b33b85805a198b2d
+AD_mice_MSV000093230_round_two <- read.csv("round_two/AD_mice_MSV000093230_round_two_merged_results.tsv", sep = "\t")
+AD_mice_MSV000093230_round_two_summary <- cal_occurrence(AD_mice_MSV000093230_round_two)
+
+# AD fecal_MSV000096039_round_two
+# https://gnps2.org/status?task=5d2cca82f8f04f13903dd90b441b0de2
+AD_fecal_MSV000096039_round_two <- read.csv("round_two/AD_fecal_MSV000096039_round_two_merged_results.tsv", sep = "\t")
+AD_fecal_MSV000096039_round_two_summary <- cal_occurrence(AD_fecal_MSV000096039_round_two)
+
+# AD_cecum_MSV000096038_round_two
+# https://gnps2.org/status?task=1aaa8fbe6aee4ed5bc55f4f5029e4f2e
+AD_cecum_MSV000096038_round_two <- read.csv("round_two/AD_cecum_MSV000096038_round_two_merged_results.tsv", sep = "\t")
+AD_cecum_MSV000096038_round_two_summary <- cal_occurrence(AD_cecum_MSV000096038_round_two)
+
+# AD_liver_MSV000096037_round_two
+# https://gnps2.org/status?task=e3ee723c9c804e9cac61c5ebf92df56a
+AD_liver_MSV000096037_round_two <- read.csv("round_two/AD_liver_MSV000096037_round_two_merged_results.tsv", sep = "\t")
+AD_liver_MSV000096037_round_two_summary <- cal_occurrence(AD_liver_MSV000096037_round_two)
+
+# AD serum_MSV000096036_round_two
+# https://gnps2.org/status?task=f0a058e081a342cc870cce21b14cc61e
+AD_serum_MSV000096036_round_two <- read.csv("round_two/AD_serum_MSV000096036_round_two_merged_results.tsv", sep = "\t")
+AD_serum_MSV000096036_round_two_summary <- cal_occurrence(AD_serum_MSV000096036_round_two)
+
+# AD_mice_MSV000096035_round_two
+# https://gnps2.org/status?task=710b64377ad041349dcc7bee8ef3c465
+AD_mice_MSV000096035_round_two <- read.csv("round_two/AD_mice_MSV000096035_round_two_merged_results.tsv", sep = "\t")
+AD_mice_MSV000096035_round_two_summary <- cal_occurrence(AD_mice_MSV000096035_round_two)
+
+# ADRC plasma_MSV000094395_round_two
+# https://gnps2.org/status?task=7e848d873f5a450a89ffeca68dc1d03d
+ADRC_plasma_MSV000094395_round_two <- read.csv("round_two/ADRC_plasma_MSV000094395_round_two_merged_results.tsv", sep = "\t")
+ADRC_plasma_MSV000094395_round_two_summary <- cal_occurrence(ADRC_plasma_MSV000094395_round_two)
+
+# HNRC fecal_MSV000092833_round_two
+# https://gnps2.org/status?task=e2186a30de6a45198f91429ce28eeeca
+HNRC_fecal_MSV000092833_round_two <- read.csv("round_two/HNRC_fecal_MSV000092833_round_two_merged_results.tsv", sep = "\t")
+HNRC_fecal_MSV000092833_round_two_summary <- cal_occurrence(HNRC_fecal_MSV000092833_round_two)
+
+# ADRC SetTwo fecal_MSV000094515_round_two
+# https://gnps2.org/status?task=d0744f0a77ec4ec3ba2fa4ac47496469
+ADRC_SetTwo_fecal_MSV000094515_round_two <- read.csv("round_two/ADRC_SetTwo_fecal_MSV000094515_round_two_merged_results.tsv", sep = "\t")
+ADRC_SetTwo_fecal_MSV000094515_round_two_summary <- cal_occurrence(ADRC_SetTwo_fecal_MSV000094515_round_two)
+
+# ADRC SetOne fecal_MSV000095418_round_two
+# https://gnps2.org/status?task=eb54812fa3ee483c9b98316475b92499
+ADRC_SetOne_fecal_MSV000095418_round_two <- read.csv("round_two/ADRC_SetOne_fecal_MSV000095418_round_two_merged_results.tsv", sep = "\t")
+ADRC_SetOne_fecal_MSV000095418_round_two_summary <- cal_occurrence(ADRC_SetOne_fecal_MSV000095418_round_two)
+
+# MPRINT ADMIN milk_MSV000091520_round_two
+# https://gnps2.org/status?task=2d60f9c46742435f9913e64253c71302
+MPRINT_ADMIN_milk_MSV000091520_round_two <- read.csv("round_two/MPRINT_ADMIN_milk_MSV000091520_round_two_merged_results.tsv", sep = "\t")
+MPRINT_ADMIN_milk_MSV000091520_round_two_summary <- cal_occurrence(MPRINT_ADMIN_milk_MSV000091520_round_two)
+
+
+# AGP_MSV000080673
+# https://gnps2.org/status?task=3311bb80953b419fa069cf7c67524cc1
+AGP_MSV000080673_round_two <- read.csv("round_two/AGP_MSV000080673_round_two_merged_results.tsv", sep = "\t")
+AGP_MSV000080673_round_two_summary <- cal_occurrence(AGP_MSV000080673_round_two)
+
+#AD_cecum_MSV000096038_round_two
+#https://gnps2.org/status?task=1aaa8fbe6aee4ed5bc55f4f5029e4f2e
+AD_cecum_MSV000096038_round_two <- read.csv("round_two/AD_cecum_MSV000096038_round_two_merged_results.tsv", sep = "\t")
+AD_cecum_MSV000096038_round_two_summary <- cal_occurrence(AD_cecum_MSV000096038_round_two)
+
+# combine drug suspects
+suspect <- read.csv("/Users/ninazhao/Library/CloudStorage/GoogleDrive-ninazhao1001@gmail.com/My Drive/postdoc/R/ExpoMASST/analogMASST/20240810_analog_final_upload/20240904_drug_analog_suspect_final_metadata.csv")
+suspect_to_include <- suspect %>% dplyr::filter(grepl("suspect", chemical_source) & !grepl("Low_", chemical_source))
+
+clean_mgf_ccmslib <- function(input_file, libid_to_include) {
+  blocks_to_keep <- vector("list", length(input_file) / 10) # Preallocate for speed
+  current_block <- character()  # Store the current block as a vector of lines
+  block_count <- 0  # Counter for processed blocks
+  start_time <- Sys.time()  # Start time tracking
+  keep_index <- 1  # Track index for blocks_to_keep
+  
+  for (line in input_file) {
+    current_block <- c(current_block, line)  # Append line to current block
+    
+    if (startsWith(line, "END IONS")) {
+      libid_line <- current_block[grepl("SPECTRUMID=", current_block)]  
+      libid <- sub("SPECTRUMID=", "", libid_line)  # Extract USI
+      
+      if (libid %in% libid_to_include) {
+        blocks_to_keep[[keep_index]] <- paste0(current_block, collapse = "\n")  # Store processed block
+        keep_index <- keep_index + 1
+      }
+      
+      block_count <- block_count + 1  # Increment block count
+      
+      # Print elapsed time every 100 blocks
+      if (block_count %% 1000 == 0) {
+        cat(sprintf("Processed %d blocks. Elapsed time: %.2f seconds\n", block_count, as.numeric(difftime(Sys.time(), start_time, units = "secs"))))
+      }
+      
+      current_block <- character()  # Reset block
+    }
+  }
+  
+  cleaned_content <- paste0(blocks_to_keep[1:(keep_index - 1)], collapse = "\n\n")  # Combine only non-empty elements
+  return(cleaned_content)
+}
+
+mgf_raw <- readLines("/Users/ninazhao/Library/CloudStorage/GoogleDrive-ninazhao1001@gmail.com/My Drive/drug_lib_share/finalfinal/GNPS_Drug_Library_Spectra_Drug_Analogs.mgf")
+usi_modified <- clean_mgf_ccmslib(mgf_raw,  suspect_to_include$analog_libid)
+writeLines(usi_modified, "analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/suspect.mgf")
+write.csv(suspect_to_include, "analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/suspect_metadata.csv", row.names = F)
+
+
+
+input_file <- updated_library[1:50]
+
+clean_mgf_scans <- function(input_file) {
+  blocks_to_keep <- vector("list", length(input_file) / 10) # Preallocate for speed
+  current_block <- character()  # Store the current block as a vector of lines
+  block_count <- 1  # Counter for processed blocks
+  start_time <- Sys.time()  # Start time tracking
+
+  for (line in input_file) {
+    if (!grepl("INSTRUMENT|FILENAME|SEQ|NOTES|ORGANISM|SMILES|INCHI|INCHIAUX|LIBRARYQUALITY|SPECTRUMID", line)){
+    current_block <- c(current_block, line)  # Append line to current block
+    }
+    if (startsWith(line, "END IONS")) {
+      title_line <- current_block[grepl("TITLE=", current_block)]  
+      current_block <- sub(title_line, paste0("TITLE=Scan Number: ", block_count), current_block) 
+      scans_line <- current_block[grepl("SCANS=", current_block)]  
+      current_block <- sub(scans_line, paste0("SCANS=", block_count), current_block) 
+      blocks_to_keep[[block_count]] <- paste0(current_block, collapse = "\n")  # Store processed block
+      block_count <- block_count + 1  # Increment block count
+      
+      # Print elapsed time every 100 blocks
+      if (block_count %% 1000 == 0) {
+        cat(sprintf("Processed %d blocks. Elapsed time: %.2f seconds\n", block_count, as.numeric(difftime(Sys.time(), start_time, units = "secs"))))
+      }
+      
+      current_block <- character()  # Reset block
+    }
+  }
+  
+  cleaned_content <- paste0(blocks_to_keep[1:(block_count - 1)], collapse = "\n\n")  # Combine only non-empty elements
+  return(cleaned_content)
+}
+
+updated_library <- readLines("analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/GNPS_Drug_Library_Spectra_Drug_Analogs_Updated.mgf")
+library_modified <- clean_mgf_scans(updated_library)
+
+writeLines(library_modified, "analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/GNPS_Drug_Library_Spectra_Drug_Analogs_Updated_Scans_Modified.mgf")
+
+updated_library_scans_fixed <- readLines("analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/GNPS_Drug_Library_Spectra_Drug_Analogs_Updated_Scans_Modified.mgf")
+updated_analog_gnps_info <- data.frame(
+  analog_scans = as.numeric(sub("SCANS=", "", updated_library_scans_fixed[grepl("SCANS=", updated_library_scans_fixed)])),
+  analog_ID_old = sub("SPECTRUMID=", "", updated_library_scans_fixed[grepl("SPECTRUMID=", updated_library_scans_fixed)]),
+  pepmass = as.numeric(sub("PEPMASS=", "", updated_library_scans_fixed[grepl("PEPMASS=", updated_library_scans_fixed)])),
+  charge = sub("CHARGE=", "", updated_library_scans_fixed[grepl("CHARGE=", updated_library_scans_fixed)]),
+  name = sub("NAME=", "", updated_library_scans_fixed[grepl("NAME=", updated_library_scans_fixed) & !grepl("FILENAME=", updated_library_scans_fixed)]),
+  ionmode = sub("IONMODE=", "", updated_library_scans_fixed[grepl("IONMODE=", updated_library_scans_fixed)])
+)
+
+write.csv(updated_analog_gnps_info, "analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/20250402_updated_scans_metadata_for_GNPS_reupload.csv", row.names = F)
+
+library_after_final_upload <- readLines("/Users/ninazhao/Library/CloudStorage/GoogleDrive-ninazhao1001@gmail.com/My Drive/drug_lib_share/finalfinalfinal/GNPS_Drug_Library_Spectra_Drug_Analogs_Updated.mgf")
+library_after_final_upload_info <- data.frame(
+  analog_scans = as.numeric(sub("SCANS=", "", library_after_final_upload[grepl("SCANS=", library_after_final_upload)])),
+  analog_ID_new = sub("SPECTRUMID=", "", library_after_final_upload[grepl("SPECTRUMID=", library_after_final_upload)])
+)
+metadata <- read.csv("analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/20250402_updated_scans_metadata_for_GNPS_reupload.csv")
+metadata <- metadata %>% left_join(library_after_final_upload_info, by = "analog_scans")
+write.csv(metadata, "analogMASST/20250313_analog_reprocess_William_code/final_mgf_metadata/20250402_updated_scans_metadata_for_GNPS_reupload.csv", row.names = F)

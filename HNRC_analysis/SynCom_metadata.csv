@@ -1,0 +1,292 @@
+﻿sample,group,drug_group,time,final_group
+BHI_T72_drug_mix5_3,BHI,5,T72,BHI_T72
+BHI_T72_drug_mix5_2,BHI,5,T72,BHI_T72
+BHI_T72_drug_mix5_1,BHI,5,T72,BHI_T72
+BHI_T72_drug_mix4_3,BHI,4,T72,BHI_T72
+BHI_T72_drug_mix4_2,BHI,4,T72,BHI_T72
+BHI_T72_drug_mix4_1,BHI,4,T72,BHI_T72
+BHI_T72_drug_mix3_3,BHI,3,T72,BHI_T72
+BHI_T72_drug_mix3_2,BHI,3,T72,BHI_T72
+BHI_T72_drug_mix3_1,BHI,3,T72,BHI_T72
+BHI_T72_drug_mix2_3,BHI,2,T72,BHI_T72
+BHI_T72_drug_mix2_2,BHI,2,T72,BHI_T72
+BHI_T72_drug_mix2_1,BHI,2,T72,BHI_T72
+BHI_T72_drug_mix1_3,BHI,1,T72,BHI_T72
+BHI_T72_drug_mix1_2,BHI,1,T72,BHI_T72
+BHI_T72_drug_mix1_1,BHI,1,T72,BHI_T72
+BHI_T0_drug_mix5_3,BHI,5,T0,BHI_T0
+BHI_T0_drug_mix5_2,BHI,5,T0,BHI_T0
+BHI_T0_drug_mix5_1,BHI,5,T0,BHI_T0
+BHI_T0_drug_mix4_3,BHI,4,T0,BHI_T0
+BHI_T0_drug_mix4_2,BHI,4,T0,BHI_T0
+BHI_T0_drug_mix4_1,BHI,4,T0,BHI_T0
+BHI_T0_drug_mix3_3,BHI,3,T0,BHI_T0
+BHI_T0_drug_mix3_2,BHI,3,T0,BHI_T0
+BHI_T0_drug_mix3_1,BHI,3,T0,BHI_T0
+BHI_T0_drug_mix2_3,BHI,2,T0,BHI_T0
+BHI_T0_drug_mix2_2,BHI,2,T0,BHI_T0
+BHI_T0_drug_mix2_1,BHI,2,T0,BHI_T0
+BHI_T0_drug_mix1_3,BHI,1,T0,BHI_T0
+BHI_T0_drug_mix1_2,BHI,1,T0,BHI_T0
+BHI_T0_drug_mix1_1,BHI,1,T0,BHI_T0
+BHI_3,BHI,0,T72,BHI_T72
+BHI_2,BHI,0,T72,BHI_T72
+BHI_1,BHI,0,T72,BHI_T72
+Full_syncom_T72_drug_mix_5_3,SynCom,5,T72,SynCom_T72
+Full_syncom_T72_drug_mix_5_2,SynCom,5,T72,SynCom_T72
+Full_syncom_T72_drug_mix_5_1,SynCom,5,T72,SynCom_T72
+Full_syncom_T72_drug_mix_4_3,SynCom,4,T72,SynCom_T72
+Full_syncom_T72_drug_mix_4_2,SynCom,4,T72,SynCom_T72
+Full_syncom_T72_drug_mix_4_1,SynCom,4,T72,SynCom_T72
+Full_syncom_T72_drug_mix_3_3,SynCom,3,T72,SynCom_T72
+Full_syncom_T72_drug_mix_3_2,SynCom,3,T72,SynCom_T72
+Full_syncom_T72_drug_mix_3_1,SynCom,3,T72,SynCom_T72
+Full_syncom_T72_drug_mix_2_3,SynCom,2,T72,SynCom_T72
+Full_syncom_T72_drug_mix_2_2,SynCom,2,T72,SynCom_T72
+Full_syncom_T72_drug_mix_2_1,SynCom,2,T72,SynCom_T72
+Full_syncom_T72_drug_mix_1_3,SynCom,1,T72,SynCom_T72
+Full_syncom_T72_drug_mix_1_2,SynCom,1,T72,SynCom_T72
+Full_syncom_T72_drug_mix_1_1,SynCom,1,T72,SynCom_T72
+Full_syncom_T72_3,SynCom,0,T72,SynCom_T72
+Full_syncom_T72_2,SynCom,0,T72,SynCom_T72
+Full_syncom_T72_1,SynCom,0,T72,SynCom_T72
+Full_syncom_T0_drug_mix_5_3,SynCom,5,T0,SynCom_T0
+Full_syncom_T0_drug_mix_5_2,SynCom,5,T0,SynCom_T0
+Full_syncom_T0_drug_mix_5_1,SynCom,5,T0,SynCom_T0
+Full_syncom_T0_drug_mix_4_3,SynCom,4,T0,SynCom_T0
+Full_syncom_T0_drug_mix_4_2,SynCom,4,T0,SynCom_T0
+Full_syncom_T0_drug_mix_4_1,SynCom,4,T0,SynCom_T0
+Full_syncom_T0_drug_mix_3_3,SynCom,3,T0,SynCom_T0
+Full_syncom_T0_drug_mix_3_2,SynCom,3,T0,SynCom_T0
+Full_syncom_T0_drug_mix_3_1,SynCom,3,T0,SynCom_T0
+Full_syncom_T0_drug_mix_2_3,SynCom,2,T0,SynCom_T0
+Full_syncom_T0_drug_mix_2_2,SynCom,2,T0,SynCom_T0
+Full_syncom_T0_drug_mix_2_1,SynCom,2,T0,SynCom_T0
+Full_syncom_T0_drug_mix_1_3,SynCom,1,T0,SynCom_T0
+Full_syncom_T0_drug_mix_1_2,SynCom,1,T0,SynCom_T0
+Full_syncom_T0_drug_mix_1_1,SynCom,1,T0,SynCom_T0
+Blank_6,blank,not applicable,not applicable,blank_not applicable
+Blank_5,blank,not applicable,not applicable,blank_not applicable
+Blank_4,blank,not applicable,not applicable,blank_not applicable
+Blank_3,blank,not applicable,not applicable,blank_not applicable
+Blank_2,blank,not applicable,not applicable,blank_not applicable
+Blank_1,blank,not applicable,not applicable,blank_not applicable
+Group_1_fast_T48_drug_mix_5_3,Fast growers,5,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_5_2,Fast growers,5,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_5_1,Fast growers,5,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_4_3,Fast growers,4,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_4_2,Fast growers,4,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_4_1,Fast growers,4,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_3_3,Fast growers,3,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_3_2,Fast growers,3,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_3_1,Fast growers,3,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_2_3,Fast growers,2,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_2_2,Fast growers,2,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_2_1,Fast growers,2,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_1_3,Fast growers,1,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_1_2,Fast growers,1,T72,Fast growers_T72
+Group_1_fast_T48_drug_mix_1_1,Fast growers,1,T72,Fast growers_T72
+Group_1_fast_T48_3,Fast growers,0,T72,Fast growers_T72
+Group_1_fast_T48_2,Fast growers,0,T72,Fast growers_T72
+Group_1_fast_T48_1,Fast growers,0,T72,Fast growers_T72
+Group_1_fast_T0_drug_mix_5_3,Fast growers,5,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_5_2,Fast growers,5,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_5_1,Fast growers,5,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_4_3,Fast growers,4,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_4_2,Fast growers,4,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_4_1,Fast growers,4,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_3_3,Fast growers,3,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_3_2,Fast growers,3,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_3_1,Fast growers,3,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_2_3,Fast growers,2,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_2_2,Fast growers,2,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_2_1,Fast growers,2,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_1_3,Fast growers,1,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_1_2,Fast growers,1,T0,Fast growers_T0
+Group_1_fast_T0_drug_mix_1_1,Fast growers,1,T0,Fast growers_T0
+Group_3_medium_slow_T72_drug_mix_5_3,Medium slow growers,5,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_5_2,Medium slow growers,5,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_5_1,Medium slow growers,5,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_4_3,Medium slow growers,4,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_4_2,Medium slow growers,4,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_4_1,Medium slow growers,4,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_3_3,Medium slow growers,3,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_3_2,Medium slow growers,3,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_3_1,Medium slow growers,3,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_2_3,Medium slow growers,2,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_2_2,Medium slow growers,2,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_2_1,Medium slow growers,2,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_1_3,Medium slow growers,1,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_1_2,Medium slow growers,1,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_drug_mix_1_1,Medium slow growers,1,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_3,Medium slow growers,0,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_2,Medium slow growers,0,T72,Medium slow growers_T72
+Group_3_medium_slow_T72_1,Medium slow growers,0,T72,Medium slow growers_T72
+Group_3_medium_slow_T0_drug_mix_5_3,Medium slow growers,5,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_5_2,Medium slow growers,5,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_5_1,Medium slow growers,5,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_4_3,Medium slow growers,4,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_4_2,Medium slow growers,4,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_4_1,Medium slow growers,4,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_3_3,Medium slow growers,3,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_3_2,Medium slow growers,3,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_3_1,Medium slow growers,3,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_2_3,Medium slow growers,2,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_2_2,Medium slow growers,2,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_2_1,Medium slow growers,2,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_1_3,Medium slow growers,1,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_1_2,Medium slow growers,1,T0,Medium slow growers_T0
+Group_3_medium_slow_T0_drug_mix_1_1,Medium slow growers,1,T0,Medium slow growers_T0
+Group_2_medium_fast_T48_drug_mix_5_3,Medium fast growers,5,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_5_2,Medium fast growers,5,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_5_1,Medium fast growers,5,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_4_3,Medium fast growers,4,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_4_2,Medium fast growers,4,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_4_1,Medium fast growers,4,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_3_3,Medium fast growers,3,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_3_2,Medium fast growers,3,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_3_1,Medium fast growers,3,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_2_3,Medium fast growers,2,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_2_2,Medium fast growers,2,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_2_1,Medium fast growers,2,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_1_3,Medium fast growers,1,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_1_2,Medium fast growers,1,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_drug_mix_1_1,Medium fast growers,1,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_3,Medium fast growers,0,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_2,Medium fast growers,0,T72,Medium fast growers_T72
+Group_2_medium_fast_T48_1,Medium fast growers,0,T72,Medium fast growers_T72
+Group_2_medium_fast_T0_drug_mix_5_3,Medium fast growers,5,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_5_2,Medium fast growers,5,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_5_1,Medium fast growers,5,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_4_3,Medium fast growers,4,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_4_2,Medium fast growers,4,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_4_1,Medium fast growers,4,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_3_3,Medium fast growers,3,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_3_2,Medium fast growers,3,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_3_1,Medium fast growers,3,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_2_3,Medium fast growers,2,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_2_2,Medium fast growers,2,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_2_1,Medium fast growers,2,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_1_3,Medium fast growers,1,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_1_2,Medium fast growers,1,T0,Medium fast growers_T0
+Group_2_medium_fast_T0_drug_mix_1_1,Medium fast growers,1,T0,Medium fast growers_T0
+pool_qc_growth_9,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_8,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_7,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_6,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_5,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_4,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_3,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_2,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_17,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_16,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_15,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_14,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_13,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_12,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_11,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_10,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_growth_1,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_9,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_8,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_7,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_6,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_5,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_4,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_3,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_2,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_13,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_12,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_11,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_10,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+pool_qc_baseline_1,pool_qc,not_applicable,not_applicable,pool_qc_not_applicable
+sixmix_9,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_8,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_7,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_6,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_5,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_4,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_3,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_24,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_23,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_22,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_21,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_20,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_2,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_19,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_18,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_17,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_16,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_15,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_14,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_13,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_12,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_11,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_10,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+sixmix_1,sixmix,not_applicable,not_applicable,sixmix_not_applicable
+Group_4_slow_T72_drug_mix_5_3,Slow growers,5,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_5_2,Slow growers,5,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_5_1,Slow growers,5,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_4_3,Slow growers,4,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_4_2,Slow growers,4,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_4_1,Slow growers,4,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_3_3,Slow growers,3,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_3_2,Slow growers,3,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_3_1,Slow growers,3,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_2_3,Slow growers,2,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_2_2,Slow growers,2,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_2_1,Slow growers,2,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_1_3,Slow growers,1,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_1_2,Slow growers,1,T72,Slow growers_T72
+Group_4_slow_T72_drug_mix_1_1,Slow growers,1,T72,Slow growers_T72
+Group_4_slow_T72_3,Slow growers,0,T72,Slow growers_T72
+Group_4_slow_T72_2,Slow growers,0,T72,Slow growers_T72
+Group_4_slow_T72_1,Slow growers,0,T72,Slow growers_T72
+Group_4_slow_T0_drug_mix_5_3,Slow growers,5,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_5_2,Slow growers,5,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_5_1,Slow growers,5,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_4_3,Slow growers,4,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_4_2,Slow growers,4,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_4_1,Slow growers,4,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_3_3,Slow growers,3,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_3_2,Slow growers,3,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_3_1,Slow growers,3,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_2_3,Slow growers,2,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_2_2,Slow growers,2,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_2_1,Slow growers,2,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_1_3,Slow growers,1,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_1_2,Slow growers,1,T0,Slow growers_T0
+Group_4_slow_T0_drug_mix_1_1,Slow growers,1,T0,Slow growers_T0
+Syncom_red_T72_drug_mix_5_3,SynCom reduced,5,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_5_2,SynCom reduced,5,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_5_1,SynCom reduced,5,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_4_3,SynCom reduced,4,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_4_2,SynCom reduced,4,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_4_1,SynCom reduced,4,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_3_3,SynCom reduced,3,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_3_2,SynCom reduced,3,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_3_1,SynCom reduced,3,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_2_3,SynCom reduced,2,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_2_2,SynCom reduced,2,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_2_1,SynCom reduced,2,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_1_3,SynCom reduced,1,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_1_2,SynCom reduced,1,T72,SynCom reduced_T72
+Syncom_red_T72_drug_mix_1_1,SynCom reduced,1,T72,SynCom reduced_T72
+Syncom_red_T72_3,SynCom reduced,0,T72,SynCom reduced_T72
+Syncom_red_T72_2,SynCom reduced,0,T72,SynCom reduced_T72
+Syncom_red_T72_1,SynCom reduced,0,T72,SynCom reduced_T72
+Syncom_red_T0_drug_mix_5_3,SynCom reduced,5,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_5_2,SynCom reduced,5,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_5_1,SynCom reduced,5,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_4_3,SynCom reduced,4,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_4_2,SynCom reduced,4,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_4_1,SynCom reduced,4,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_3_3,SynCom reduced,3,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_3_2,SynCom reduced,3,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_3_1,SynCom reduced,3,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_2_3,SynCom reduced,2,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_2_2,SynCom reduced,2,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_2_1,SynCom reduced,2,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_1_3,SynCom reduced,1,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_1_2,SynCom reduced,1,T0,SynCom reduced_T0
+Syncom_red_T0_drug_mix_1_1,SynCom reduced,1,T0,SynCom reduced_T0
